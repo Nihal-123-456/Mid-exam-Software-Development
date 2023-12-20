@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+    rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg p-2" style="background-color: #4c5d61;">
+        <div class="container-fluid">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="d-flex nav-item">
+                <i class="fa fa-home" style="font-size:36px;color: white;"></i>
+                <a class="nav-link text-light" style="font-weight: bold; font-size: 18px;" href="{% url 'home' %}">Home</a>
+              </li>
+            </ul>
+            <form class="d-flex gap-3">
+            {% if user.is_authenticated %}
+                
+                <a class="btn btn-danger text-light" style="font-weight: bold;" href="{% url 'logout' %}">Logout</a>
+                <a class="btn btn-success text-light" style="font-weight: bold;" href="{% url 'profile' %}">Profile</a>
+                
+            {% else %}
+                
+                <a class="btn btn-danger text-light" style="font-weight: bold;" href="{% url 'register' %}">Register</a>
+                <a class="btn btn-success text-light" style="font-weight: bold;" href="{% url 'login' %}">Login</a>
+                
+            {% endif %}
+            </form>
+          </div>
+        </div>
+      </nav>
+    {% if messages %}
+    {% for m in messages %}
+      <p class="bg-warning text-white p-2" style="font-weight: bold; text-align: center;">{{m}}</p>
+    {% endfor %}
+    {% endif %}
+    {% block content%}
+    <div class="d-flex gap-3" style="background-color: #b0c3ca;">
+        <img style="width: 700px; height: 100%;" src="{% static 'car-1.jpg' %}" alt="car">
+        <div class="m-auto ">
+            <h2>Welcome to our store!</h2>
+            <p>It is the ultimate destination for automotive enthusiasts and 
+                aficionados! We rev up your passion for cars with a turbocharged 
+                blend of exhilarating content, cutting-edge reviews, and a community that shares your 
+                love for the open road. Whether you're a gearhead seeking the latest insights on 
+                performance vehicles, a casual driver in search of practical advice, or a collector with 
+                an eye for rare gems, our virtual showroom has something for everyone. Buckle up and 
+                join us on a thrilling journey through the world of automotive excellence, where 
+                horsepower meets innovation, and the road ahead is always an adventure. Fasten your seatbelt; 
+                the ride starts here!</p>
+        </div>
+    </div>
+    <div style="background-color: #cddee3;">
+        <div class="col-12 p-3 mb-4" style="background-color: #bfd6dc; border-radius: 5px; text-align: center;">
+            <h5 class="mt-4" style="font-weight: bold;">List of Brands</h5>
+            <div class="d-flex justify-content-center mt-4 mb-4">
+                {% for b in type %}
+                <div class="form-check">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        <a href="{% url 'brand_select' b.slug %}" class="text-decoration-none text-dark btn btn-success" style="font-weight: bold;">
+                        {{b.name}}</a>
+                    </label>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        {% if data %}
+        <div class="d-flex gap-3 col-9 m-auto justify-content-center flex-wrap">
+        {% for d in data %}
+            <div class="card mt-5 mb-5" style="width: 18rem; background-color: #b2cad1; border-color: #b2cad1;">
+            <img src="{{d.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body" style="text-align: center;">
+            <h5 class="card-title">{{d.car_brand}}</h5>
+            <p class="card-text" style="font-style: italic; font-weight: bold;">{{d.car_name}}</p>
+            <p class="card-text" >{{d.description | truncatewords:15}}</p>
+            <p class="card-text" style="font-weight: bold; font-size: 18px;">T.K {{d.price}}</p>
+            <a href="{% url 'details' d.id %}" class="btn btn-primary mb-3" style="font-weight: bold;">View details</a>
+            </div>
+            </div>
+        {% endfor%}
+        </div>
+        {% else %}
+            <h5>No data to show!</h5>
+        {% endif %}
+    </div>
+
+
+    {% endblock %}
+
+
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+      crossorigin="anonymous"></script>
+</body>
+</html>

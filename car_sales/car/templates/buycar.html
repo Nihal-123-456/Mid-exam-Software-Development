@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+    <h3 style="text-align: center;" class="mt-5"> Are you sure you want to buy this car?</h3>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary px-3 pb-2 mt-5" style="font-weight: bold; margin-left: 630px;">Confirm</button>
+    </form>
+{% endif %}
+{% endblock %}
